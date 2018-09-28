@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const personaRepositorio = require('../repositorio/personas');
+const personaRepositorio = require('../repositorio/content');
 
 router.post('', async (req, res, next) => {
     try {  
