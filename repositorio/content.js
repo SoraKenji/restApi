@@ -14,7 +14,8 @@ const getUserData = async () => {
         users as usr, posts as pst, todos as tds 
         WHERE pst.userid = usr.id and tds.userid = usr.id`);
     conexion.release();
-    return result.rows[0];
+    console.log(result);
+
 }
 const getUserDataById = async (userId) => {
     const conexion = await conectar();
@@ -39,35 +40,35 @@ const saveUser = async (user) => {
         throw err;
     }
 }
-const getUserPost = (userId) => {
+const getUserPost = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         "SELECT * FROM posts as pst, users as usr WHERE usr.id = pst.userid and usr.id = $1", [userId]);
     conexion.release();
     return result.rows[0];
 }
-const getUserAlbums = (userId) => {
+const getUserAlbums = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         "SELECT * FROM albums as albm, users as usr WHERE usr.id = albm.userid and usr.id = $1", [userId]);
     conexion.release();
     return result.rows[0];
 }
-const getUserTodos = (userId) => {
+const getUserTodos = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         "SELECT * FROM todos as tds, users as usr WHERE usr.id = tds.userid and usr.id = $1", [userId]);
     conexion.release();
     return result.rows[0];
 }
-const deleteUserById = (userId) => {
+const deleteUserById = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         "DELETE users WHERE id = $1", [userId]);
     conexion.release();
     return result.rows[0];
 }
-const updateUser = (user) => {
+const updateUser = async (user) => {
     try {
         const conexion = await conectar();
         const text = `UPDATE users
@@ -84,7 +85,7 @@ const updateUser = (user) => {
 //// User End
 
 //// Post
-const getPostData = () => {
+const getPostData = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * posts as psts, users as usr, comments as cmts 
@@ -93,7 +94,7 @@ const getPostData = () => {
     conexion.release();
     return result.rows[0];
 }
-const getPostDataById = (postId) => {
+const getPostDataById = async (postId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * posts as psts, users as usr, comments as cmts 
@@ -102,7 +103,7 @@ const getPostDataById = (postId) => {
     conexion.release();
     return result.rows[0];
 }
-const getPostCommentsById = (postId) => {
+const getPostCommentsById = async (postId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * posts as psts, comments as cmts 
@@ -111,7 +112,7 @@ const getPostCommentsById = (postId) => {
     conexion.release();
     return result.rows[0];
 }
-const savePost = (post) => {
+const savePost = async (post) => {
     try {
         const conexion = await conectar();
         const text = `INSERT INTO 
@@ -125,14 +126,14 @@ const savePost = (post) => {
         throw err;
     }
 }
-const deletePostById = (postId) => {
+const deletePostById = async (postId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         "DELETE posts WHERE id = $1", [postId]);
     conexion.release();
     return result.rows[0];
 }
-const updatePost = (post) => {
+const updatePost = async (post) => {
     try {
         const conexion = await conectar();
         const text = `UPDATE posts
@@ -149,7 +150,7 @@ const updatePost = (post) => {
 //// Post End
 
 //// Comment
-const getCommentData = () => {
+const getCommentData = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * Comments as psts, comments as cmts 
@@ -158,7 +159,7 @@ const getCommentData = () => {
     conexion.release();
     return result.rows[0];
 }
-const getCommentDataById = (postId) => {
+const getCommentDataById = async (postId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * posts as psts, comments as cmts 
@@ -167,7 +168,7 @@ const getCommentDataById = (postId) => {
     conexion.release();
     return result.rows[0];
 }
-const saveComment = (comment) => {
+const saveComment = async (comment) => {
     try {
         const conexion = await conectar();
         const text = `INSERT INTO 
@@ -181,14 +182,14 @@ const saveComment = (comment) => {
         throw err;
     }
 }
-const deleteCommentById = (commentId) => {
+const deleteCommentById = async (commentId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         "DELETE comments WHERE id = $1", [commentId]);
     conexion.release();
     return result.rows[0];
 }
-const updateComment = (comment) => {
+const updateComment = async (comment) => {
     try {
         const conexion = await conectar();
         const text = `UPDATE comments
@@ -205,7 +206,7 @@ const updateComment = (comment) => {
 //// Comment End
 
 //// Album
-const getAlbumData = () => {
+const getAlbumData = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * albums as alb, photos as pht 
@@ -214,7 +215,7 @@ const getAlbumData = () => {
     conexion.release();
     return result.rows[0];
 }
-const getAlbumDataById = (albumId) => {
+const getAlbumDataById = async (albumId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * albums as alb, photos as pht 
@@ -223,7 +224,7 @@ const getAlbumDataById = (albumId) => {
     conexion.release();
     return result.rows[0];
 }
-const getAlbumPhotosById = (albumId) => {
+const getAlbumPhotosById = async (albumId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * albums as alb, photos as pht 
@@ -232,7 +233,7 @@ const getAlbumPhotosById = (albumId) => {
     conexion.release();
     return result.rows[0];
 }
-const saveAlbum = (album) => {
+const saveAlbum = async (album) => {
     try {
         const conexion = await conectar();
         const text = `INSERT INTO 
@@ -246,14 +247,14 @@ const saveAlbum = (album) => {
         throw err;
     }
 }
-const deleteAlbumById = (albumId) => {
+const deleteAlbumById = async (albumId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         "DELETE albums WHERE id = $1", [albumId]);
     conexion.release();
     return result.rows[0];
 }
-const updateAlbum = (album) => {
+const updateAlbum = async (album) => {
     try {
         const conexion = await conectar();
         const text = `UPDATE albums
@@ -270,7 +271,7 @@ const updateAlbum = (album) => {
 //// Album End
 
 //// Photo
-const getPhotosData = () => {
+const getPhotosData = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * albums as alb, photos as pht 
@@ -279,7 +280,7 @@ const getPhotosData = () => {
     conexion.release();
     return result.rows[0];
 }
-const getPhotosDataById = (photosId) => {
+const getPhotosDataById = async (photosId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * albums as alb, photos as pht 
@@ -288,7 +289,7 @@ const getPhotosDataById = (photosId) => {
     conexion.release();
     return result.rows[0];
 }
-const savePhoto = (album) => {
+const savePhoto = async (album) => {
     try {
         const conexion = await conectar();
         const text = `INSERT INTO 
@@ -302,14 +303,14 @@ const savePhoto = (album) => {
         throw err;
     }
 }
-const deletePhotoById = (photosId) => {
+const deletePhotoById = async (photosId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         "DELETE photos WHERE id = $1", [photosId]);
     conexion.release();
     return result.rows[0];
 }
-const updatePhoto = (photo) => {
+const updatePhoto = async (photo) => {
     try {
         const conexion = await conectar();
         const text = `UPDATE photos
@@ -326,7 +327,7 @@ const updatePhoto = (photo) => {
 //// Photo End
 
 //// Todo
-const getTodos = () => {
+const getTodos = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * todos as tds, users as usr 
@@ -335,7 +336,7 @@ const getTodos = () => {
     conexion.release();
     return result.rows[0];
 }
-const saveTodos = (todo) => {
+const saveTodos = async (todo) => {
     try {
         const conexion = await conectar();
         const text = `INSERT INTO 
@@ -358,5 +359,4 @@ exports.deleteUserById = deleteUserById;
 exports.getUserAlbums = getUserAlbums;
 exports.getUserTodos = getUserTodos;
 exports.getUserPost = getUserPost;
-exports.getUserById = getUserById;
 exports.saveUser = saveUser;
