@@ -1,21 +1,18 @@
 const { conectar } = require('./conexion');
 
 //// User
-const get = async () => {
+const getUsers = async () => {
     const conexion = await conectar();
     const result = await conexion.query("SELECT * FROM users");
     conexion.release();
     return result.rows;
 }
-const getUserData = async () => {
-    const conexion = await conectar();
-    const result = await conexion.query(
-        `SELECT * FROM
-        users as usr, posts as pst, todos as tds 
-        WHERE pst.userid = usr.id and tds.userid = usr.id`);
-    conexion.release();
-    console.log(result);
 
+const getUsersById = async (userId) => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM users WHERE id = $1", [userId]);
+    conexion.release();
+    return result.rows[0];
 }
 const getUserDataById = async (userId) => {
     const conexion = await conectar();
@@ -30,10 +27,10 @@ const saveUser = async (user) => {
     try {
         const conexion = await conectar();
         const text = `INSERT INTO 
-                            users(id, nombre, username, email, phone, website) 
-                        VALUES($1, $2, $3, $4, $5, $6) 
+                            users(nombre, username, email, phone, website) 
+                        VALUES($1, $2, $3, $4, $5) 
                         RETURNING *`;
-        const values = [user.id, user.nombre, user.username, user.email, user.phone, user.website];
+        const values = [user.nombre, user.username, user.email, user.phone, user.website];
         const res = await conexion.query(text, values);
         return res.rows[0];
     } catch (err) {
@@ -43,23 +40,23 @@ const saveUser = async (user) => {
 const getUserPost = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query(
-        "SELECT * FROM posts as pst, users as usr WHERE usr.id = pst.userid and usr.id = $1", [userId]);
+        "SELECT * FROM posts WHERE userid = $1", [userId]);
     conexion.release();
-    return result.rows[0];
+    return result.rows;
 }
 const getUserAlbums = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query(
-        "SELECT * FROM albums as albm, users as usr WHERE usr.id = albm.userid and usr.id = $1", [userId]);
+        "SELECT * FROM albums WHERE userid = $1", [userId]);
     conexion.release();
-    return result.rows[0];
+    return result.rows;
 }
 const getUserTodos = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query(
-        "SELECT * FROM todos as tds, users as usr WHERE usr.id = tds.userid and usr.id = $1", [userId]);
+        "SELECT * FROM todos WHERE userid = $1", [userId]);
     conexion.release();
-    return result.rows[0];
+    return result.rows;
 }
 const deleteUserById = async (userId) => {
     const conexion = await conectar();
@@ -85,6 +82,12 @@ const updateUser = async (user) => {
 //// User End
 
 //// Post
+const getPosts = async () => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM posts");
+    conexion.release();
+    return result.rows;
+}
 const getPostData = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
@@ -150,6 +153,12 @@ const updatePost = async (post) => {
 //// Post End
 
 //// Comment
+const getComments = async () => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM comments");
+    conexion.release();
+    return result.rows;
+}
 const getCommentData = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
@@ -206,6 +215,12 @@ const updateComment = async (comment) => {
 //// Comment End
 
 //// Album
+const getAlbums = async () => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM albums");
+    conexion.release();
+    return result.rows;
+}
 const getAlbumData = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
@@ -271,6 +286,12 @@ const updateAlbum = async (album) => {
 //// Album End
 
 //// Photo
+const getPhotos = async () => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM photos");
+    conexion.release();
+    return result.rows;
+}
 const getPhotosData = async () => {
     const conexion = await conectar();
     const result = await conexion.query(
@@ -329,6 +350,12 @@ const updatePhoto = async (photo) => {
 //// Todo
 const getTodos = async () => {
     const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM todos");
+    conexion.release();
+    return result.rows;
+}
+const getTodosData = async () => {
+    const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * todos as tds, users as usr 
         FROM 
@@ -352,8 +379,41 @@ const saveTodos = async (todo) => {
 }
 //// Todo End
 
-exports.get = get;
-exports.getUserData = getUserData;
+//// addresses
+const getAddresses = async () => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM addresses");
+    conexion.release();
+    return result.rows;
+}
+const getAddressesById = async (userId) => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM addresses WHERE userid = $1", [userId]);
+    conexion.release();
+    return result.rows;
+}
+//// end addresses
+
+//// companies
+const getCompanies = async () => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM companies");
+    conexion.release();
+    return result.rows;
+}
+const getCompaniesById = async (userId) => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM companies WHERE userid = $1", [userId]);
+    conexion.release();
+    return result.rows[0];
+}
+exports.getUsers = getUsers;
+exports.getPosts = getPosts;
+exports.getAddresses = getAddresses;
+exports.getCompanies = getCompanies;
+exports.getAddressesById = getAddressesById;
+exports.getCompaniesById = getCompaniesById;
+exports.getUsersById = getUsersById;
 exports.getUserDataById = getUserDataById;
 exports.deleteUserById = deleteUserById;
 exports.getUserAlbums = getUserAlbums;
