@@ -61,9 +61,10 @@ const getUserTodos = async (userId) => {
 const deleteUserById = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query(
-        "DELETE users WHERE id = $1", [userId]);
+        "DELETE FROM users WHERE id = $1", [userId]);
     conexion.release();
-    return result.rows[0];
+    console.log(result);
+    return result;
 }
 const updateUser = async (user) => {
     try {
@@ -405,7 +406,7 @@ const getCompaniesById = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query("SELECT * FROM companies WHERE userid = $1", [userId]);
     conexion.release();
-    return result.rows[0];
+    return result.rows;
 }
 exports.getUsers = getUsers;
 exports.getPosts = getPosts;
