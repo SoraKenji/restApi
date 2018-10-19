@@ -4,7 +4,7 @@ const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'jsonPlaceHolder',
-    password: '',
+    password: 'newPassword',
 });
 
 const conectar = async () => {

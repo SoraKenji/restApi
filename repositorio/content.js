@@ -27,11 +27,13 @@ const saveUser = async (user) => {
     try {
         const conexion = await conectar();
         const text = `INSERT INTO 
-                            users(nombre, username, email, phone, website) 
+                            users(name, username, email, phone, website) 
                         VALUES($1, $2, $3, $4, $5) 
                         RETURNING *`;
-        const values = [user.nombre, user.username, user.email, user.phone, user.website];
+        const values = [user.name, user.username, user.email, user.phone, user.website];
+
         const res = await conexion.query(text, values);
+        conexion.release();
         return res.rows[0];
     } catch (err) {
         throw err;
@@ -89,21 +91,39 @@ const getPosts = async () => {
     conexion.release();
     return result.rows;
 }
-const getPostData = async () => {
+
+const getPostsUser = async (postId) => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT us.id, us.name, us.username, " +
+        "us.email, us.phone, us.website FROM posts ps, users us WHERE ps.userid = us.id AND ps.id = $1", [postId]);
+    conexion.release();
+    return result.rows;
+}
+
+
+const getPostsComments = async (postId) => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT cm.id, cm.postid, cm.name, " +
+        "cm.email, cm.body FROM posts ps, comments cm WHERE ps.id = cm.postid AND ps.id = $1", [postId]);
+    conexion.release();
+    return result.rows;
+}
+
+const getPostData = async (postId) => {
     const conexion = await conectar();
     const result = await conexion.query(
         `SELECT * posts as psts, users as usr, comments as cmts 
         FROM 
-        psts.userid = usr.id and psts.id = cmts.postid`);
+        psts.userid = usr.id and psts.id = cmts.postid`, [postId]);
     conexion.release();
     return result.rows[0];
 }
 const getPostDataById = async (postId) => {
     const conexion = await conectar();
     const result = await conexion.query(
-        `SELECT * posts as psts, users as usr, comments as cmts 
-        FROM 
-        psts.id = $1 and psts.userid = usr.id and psts.id = cmts.postid`, [postId]);
+        `SELECT * 
+        FROM posts psts
+        WHERE psts.id = $1`, [postId]);
     conexion.release();
     return result.rows[0];
 }
@@ -410,6 +430,9 @@ const getCompaniesById = async (userId) => {
 }
 exports.getUsers = getUsers;
 exports.getPosts = getPosts;
+exports.getPostsUser = getPostsUser;
+exports.getPostDataById = getPostDataById;
+exports.getPostsComments = getPostsComments;
 exports.getAddresses = getAddresses;
 exports.getCompanies = getCompanies;
 exports.getAddressesById = getAddressesById;
