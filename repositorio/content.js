@@ -137,7 +137,7 @@ const updatePost = async (post) => {
     try {
         const conexion = await conectar();
         const text = `UPDATE posts
-                        SET userid = $2, title = $3, body = $4,
+                        SET userid = $2, title = $3, body = $4
                         WHERE id = $1
                         RETURNING *`;
         const values = [post.id, post.userid, post.title, post.body];
@@ -358,9 +358,9 @@ const getTodos = async () => {
 const getTodosUser = async (idUser) => {
     const conexion = await conectar();
     const result = await conexion.query(
-        `SELECT * from users as usr 
+        `SELECT * from todos as tds 
         where
-        usr.id = $1`, [idUser]);
+        tds.userid = $1`, [idUser]);
     conexion.release();
     return result.rows[0];
 }

@@ -23,3 +23,15 @@ exports.esCommentObject = (data) => {
 exports.esTODOObject = (data) => {
     assert.hasAllKeys(data, ['id', 'userid', 'title', 'completed']);
 }
+
+exports.esPhotoObject = (data) => {
+    assert.hasAllKeys(data, ['id', 'albumid', 'title', 'url', 'thumbnailurl']);
+}
+
+exports.esAddressObject = (data) => {
+    assert.hasAllKeys(data, ['id', 'userid', 'street', 'suite', 'city', 'zipcode', 'lat', 'lng']);
+}
+
+exports.esCompanyObject = (data) => {
+    assert.hasAllKeys(data, ['id', 'userid', 'name', 'catchphrase', 'bs']);
+}
