@@ -65,7 +65,7 @@ router.put('/users/:userid', async (req, res, next) => {
                 return;
             }
 
-            res.status(200).send(JSON.stringify({ resultado }, null, 4));
+            res.status(200).send(JSON.stringify(resultado, null, 4));
 
         } else {
             res.status(400).send(respuesta);
@@ -91,7 +91,9 @@ router.get('/users/:userid', async (req, res, next) => {
         let users = await contentRepo.getUsersById(id);
         const addresses = await contentRepo.getAddressesById(id);
         const companies = await contentRepo.getCompaniesById(id);
-
+        console.log(users);
+        console.log(addresses);
+        console.log(companies);
         users.address = new Array();
         addresses.forEach(address => {
             users.address.push({
@@ -120,7 +122,7 @@ router.get('/users/:userid', async (req, res, next) => {
             res.status(400).send('');
             return;
         }
-        res.status(200).send(JSON.stringify({ users }, null, 4));
+        res.status(200).send(JSON.stringify(users, null, 4));
 
     } catch (err) {
         res.status(500).send(err);
@@ -134,6 +136,7 @@ router.get('/users', async (req, res, next) => {
         const addresses = await contentRepo.getAddresses();
         const companies = await contentRepo.getCompanies();
         let queryfields = [];
+
         if (req.query.hasOwnProperty('fields')) {
             const re = /,/g;
             if (!re.test(req.query.fields)) {
@@ -181,7 +184,7 @@ router.get('/users', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ users }, null, 4));
+        res.status(200).send(JSON.stringify(users, null, 4));
     } catch (err) {
         res.status(500).send(err);
     }
@@ -860,7 +863,15 @@ router.get('/todos', async (req, res, next) => {
 router.post('/todos', async (req, res, next) => {
     try {
         res.setHeader('Content-Type', 'application/json');
+        if (req.body.completed == 'true') {
+            req.body.completed = true;
+        }
+        if (req.body.completed == 'false') {
+            req.body.completed = false;
+        }
+        console.log(req.body);
         const respuesta = validator.esTODO(req.body);
+        console.log(respuesta);
         if (Object.keys(respuesta).length === 0 && respuesta.constructor === Object) {
             if (req.body.completed == 'true') {
                 req.body.completed = true;

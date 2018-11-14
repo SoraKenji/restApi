@@ -218,7 +218,7 @@ exports.esTODO = (data) => {
         }
     }
     if (data.hasOwnProperty('completed')) {
-        if (data.completed == 'true' || data.completed == 'false') {
+        if (data.completed == 'true' || data.completed == 'false' || String(data.completed) == 'true' || String(data.completed) == 'false') {
             delete validadorTODO.completed;
         } else {
             validadorTODO.completed.push('Debe tener un valor true o false');

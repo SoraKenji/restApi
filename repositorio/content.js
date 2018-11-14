@@ -320,6 +320,7 @@ const savePhoto = async (album) => {
                         RETURNING *`;
         const values = [album.albumid, album.title, album.url, album.thumbnailurl];
         const res = await conexion.query(text, values);
+        conexion.release();
         return res.rows[0];
     } catch (err) {
         throw err;
@@ -341,6 +342,7 @@ const updatePhoto = async (photo) => {
                         RETURNING *`;
         const values = [photo.id, photo.albumid, photo.title, photo.url, photo.thumbnailurl];
         const res = await conexion.query(text, values);
+        conexion.release();
         return res.rows[0];
     } catch (err) {
         throw err;
@@ -379,6 +381,7 @@ const saveTODO = async (todo) => {
                         RETURNING *`;
         const values = [todo.userid, todo.title, todo.completed];
         const res = await conexion.query(text, values);
+        conexion.release();
         return res.rows[0];
     } catch (err) {
         throw err;
@@ -400,6 +403,7 @@ const updateTODO = async (TODO) => {
                         RETURNING *`;
         const values = [TODO.id, TODO.userid, TODO.title, TODO.completed];
         const res = await conexion.query(text, values);
+        conexion.release();
         return res.rows[0];
     } catch (err) {
         throw err;
@@ -418,7 +422,7 @@ const getAddressesById = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query("SELECT * FROM addresses WHERE userid = $1", [userId]);
     conexion.release();
-    return result.rows;
+    return result.rows[0];
 }
 //// end addresses
 
@@ -433,7 +437,7 @@ const getCompaniesById = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query("SELECT * FROM companies WHERE userid = $1", [userId]);
     conexion.release();
-    return result.rows;
+    return result.rows[0];
 }
 exports.getUsers = getUsers;
 exports.getPosts = getPosts;

@@ -397,6 +397,7 @@ describe("API endpoint /users", () => {
         url: "url1",
         thumbnailurl: "thumburl1"
       };
+
       const photo = await repositorio.savePhoto(data);
       chai.assert.isObject(photo);
       helper.esPhotoObject(photo);
@@ -504,7 +505,7 @@ describe("API endpoint /users", () => {
     try {
       const comments = await repositorio.getPostsComments(postId);
       for (const element of comments) {
-        expect(element).to.contain.keys("id", "userid", "title", "body");
+        expect(element).to.contain.keys("id", "postid", "name", "email", 'body');
       }
       return Promise.resolve();
     } catch (err) {
@@ -516,6 +517,7 @@ describe("API endpoint /users", () => {
     try {
       const addresses = await repositorio.getAddresses();
       for (const element of addresses) {
+        chai.assert.isObject(element);
         addressId = element.id;
         expect(element).to.contain.keys(
           "id",
@@ -588,7 +590,8 @@ describe("API endpoint /users", () => {
 
   it("Should get user by id", async () => {
     try {
-      const user = await repositorio.getUserDataById(userId);
+      const user = await repositorio.getUsersById(userId);
+
       chai.assert.isObject(user);
       helper.esUserObject(user);
       return Promise.resolve();
