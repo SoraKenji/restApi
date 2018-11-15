@@ -422,7 +422,23 @@ const getAddressesById = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query("SELECT * FROM addresses WHERE userid = $1", [userId]);
     conexion.release();
-    return result.rows[0];
+    return result.rows;
+}
+const saveAddress = async (address) => {
+    try {
+        const conexion = await conectar();
+        const text = `INSERT INTO 
+                        addresses(userid, street, suite, city, zipcode, lat, lng) 
+                    VALUES($1, $2, $3, $4, $5, $6, $7) 
+                    RETURNING *`;
+        const values = [address.userid, address.street, address.suite, address.city, address.zipcode, address.lat, address.lng];
+
+        const res = await conexion.query(text, values);
+        conexion.release();
+        return res.rows[0];
+    } catch (err) {
+        throw err;
+    }
 }
 //// end addresses
 
@@ -437,8 +453,26 @@ const getCompaniesById = async (userId) => {
     const conexion = await conectar();
     const result = await conexion.query("SELECT * FROM companies WHERE userid = $1", [userId]);
     conexion.release();
-    return result.rows[0];
+    return result.rows;
 }
+
+const saveCompany = async (company) => {
+    try {
+        const conexion = await conectar();
+        const text = `INSERT INTO 
+                    companies(userid, name, catchphrase, bs) 
+                    VALUES($1, $2, $3, $4) 
+                    RETURNING *`;
+        const values = [company.userid, company.name,
+        company.catchphrase, company.bs];
+        const res = await conexion.query(text, values);
+        conexion.release();
+        return res.rows[0];
+    } catch (err) {
+        throw err;
+    }
+}
+
 exports.getUsers = getUsers;
 exports.getPosts = getPosts;
 exports.updateUser = updateUser;
@@ -483,3 +517,5 @@ exports.getUserAlbums = getUserAlbums;
 exports.getUserTodos = getUserTodos;
 exports.getUserPost = getUserPost;
 exports.saveUser = saveUser;
+exports.saveAddress = saveAddress;
+exports.saveCompany = saveCompany;

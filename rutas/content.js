@@ -91,9 +91,6 @@ router.get('/users/:userid', async (req, res, next) => {
         let users = await contentRepo.getUsersById(id);
         const addresses = await contentRepo.getAddressesById(id);
         const companies = await contentRepo.getCompaniesById(id);
-        console.log(users);
-        console.log(addresses);
-        console.log(companies);
         users.address = new Array();
         addresses.forEach(address => {
             users.address.push({
@@ -123,8 +120,8 @@ router.get('/users/:userid', async (req, res, next) => {
             return;
         }
         res.status(200).send(JSON.stringify(users, null, 4));
-
     } catch (err) {
+        console.log(err);
         res.status(500).send(err);
     }
 });
@@ -965,6 +962,36 @@ router.delete('/todos/:todoId', async (req, res, next) => {
             return;
         }
         res.status(200).send(`La consulta ha eliminado ${resultado.rowCount} registro/s`);
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).send(err);
+    }
+});
+
+router.post('/address', async (req, res, next) => {
+    try {
+        const resultado = await contentRepo.saveAddress(req.body);
+        res.setHeader('Content-Type', 'application/json');
+        if (!resultado) {
+            res.status(404);
+            return;
+        }
+        res.status(200).send(resultado);
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).send(err);
+    }
+});
+
+router.post('/company', async (req, res, next) => {
+    try {
+        const resultado = await contentRepo.saveCompany(req.body);
+        res.setHeader('Content-Type', 'application/json');
+        if (!resultado) {
+            res.status(404);
+            return;
+        }
+        res.status(200).send(resultado);
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);

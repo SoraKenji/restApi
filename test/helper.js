@@ -35,3 +35,11 @@ exports.esAddressObject = (data) => {
 exports.esCompanyObject = (data) => {
     assert.hasAllKeys(data, ['id', 'userid', 'name', 'catchphrase', 'bs']);
 }
+
+exports.esAddressObject = (data) => {
+    assert.hasAllKeys(data, ['id', 'userid', 'street', 'suite', 'city', 'zipcode', 'lat', 'lng']);
+}
+
+exports.esCompanyObject = (data) => {
+    assert.hasAllKeys(data, ['id', 'userid', 'name', 'catchphrase', 'bs']);
+}

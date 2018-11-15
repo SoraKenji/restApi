@@ -664,23 +664,67 @@ describe("Pacientes API", () => {
     }
   });
 
+  it("Guardar address", async () => {
+    try {
+      const data = {
+        userid: userId,
+        street: "calle ejemplo 0123",
+        suite: "suite ejemplo 0123",
+        city: "concepcionbuena onda",
+        zipcode: "4030000",
+        lat: 12,
+        lng: 13
+      };
+      const response = await apiClient
+        .post(`${apiClientBaseUri}/address`)
+        .send(data)
+        .expect(200);
+      const body = response.body;
+      assert.isObject(body);
+      helper.esAddressObject(body);
+      // userId = body.id;
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+
+  it("Guardar company", async () => {
+    try {
+      const data = {
+        userid: userId,
+        name: "calle ejemplo 0123",
+        catchphrase: "suite ejemplo 0123",
+        bs: "concepcionbuena onda",
+      };
+      const response = await apiClient
+        .post(`${apiClientBaseUri}/company`)
+        .send(data)
+        .expect(200);
+      const body = response.body;
+      assert.isObject(body);
+      helper.esCompanyObject(body);
+      // userId = body.id;
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+
   it("Conseguir user by Id", async () => {
     try {
-      console.log(userId);
       const response = await apiClient
         .get(`${apiClientBaseUri}/users/${userId}`)
         .expect(200);
       const body = response.body;
-      for (const element of body) {
-        expect(element).to.contain.keys(
-          "id",
-          "name",
-          "username",
-          "email",
-          "phone",
-          "website"
-        );
-      }
+      expect(body).to.contain.keys(
+        "id",
+        "name",
+        "username",
+        "email",
+        "phone",
+        "website"
+      );
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -693,16 +737,14 @@ describe("Pacientes API", () => {
         .get(`${apiClientBaseUri}/users/${userId}?fields=posts`)
         .expect(200);
       const body = response.body;
-      for (const element of body) {
-        expect(element).to.contain.keys(
-          "id",
-          "name",
-          "username",
-          "email",
-          "phone",
-          "website"
-        );
-      }
+      expect(body).to.contain.keys(
+        "id",
+        "name",
+        "username",
+        "email",
+        "phone",
+        "website"
+      );
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -715,16 +757,14 @@ describe("Pacientes API", () => {
         .get(`${apiClientBaseUri}/users/${userId}?fields=albums`)
         .expect(200);
       const body = response.body;
-      for (const element of body) {
-        expect(element).to.contain.keys(
-          "id",
-          "name",
-          "username",
-          "email",
-          "phone",
-          "website"
-        );
-      }
+      expect(body).to.contain.keys(
+        "id",
+        "name",
+        "username",
+        "email",
+        "phone",
+        "website"
+      );
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -737,16 +777,14 @@ describe("Pacientes API", () => {
         .get(`${apiClientBaseUri}/users/${userId}?fields=todos`)
         .expect(200);
       const body = response.body;
-      for (const element of body) {
-        expect(element).to.contain.keys(
-          "id",
-          "name",
-          "username",
-          "email",
-          "phone",
-          "website"
-        );
-      }
+      expect(body).to.contain.keys(
+        "id",
+        "name",
+        "username",
+        "email",
+        "phone",
+        "website"
+      );
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -759,16 +797,14 @@ describe("Pacientes API", () => {
         .get(`${apiClientBaseUri}/users/${userId}?fields=posts,albums,todos`)
         .expect(200);
       const body = response.body;
-      for (const element of body) {
-        expect(element).to.contain.keys(
-          "id",
-          "name",
-          "username",
-          "email",
-          "phone",
-          "website"
-        );
-      }
+      expect(body).to.contain.keys(
+        "id",
+        "name",
+        "username",
+        "email",
+        "phone",
+        "website"
+      );
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -781,9 +817,7 @@ describe("Pacientes API", () => {
         .get(`${apiClientBaseUri}/users/${userId}/posts`)
         .expect(200);
       const body = response.body;
-      for (const element of body) {
-        expect(element).to.contain.keys("id", "userid", "title", "body");
-      }
+      expect(body).to.contain.keys("id", "userid", "title", "body");
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -796,15 +830,13 @@ describe("Pacientes API", () => {
         .get(`${apiClientBaseUri}/users/${userId}/albums`)
         .expect(200);
       const body = response.body;
-      for (const element of body) {
-        expect(element).to.contain.keys(
-          "id",
-          "albumid",
-          "title",
-          "url",
-          "thumbnailurl"
-        );
-      }
+      expect(body).to.contain.keys(
+        "id",
+        "albumid",
+        "title",
+        "url",
+        "thumbnailurl"
+      );
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -817,9 +849,8 @@ describe("Pacientes API", () => {
         .get(`${apiClientBaseUri}/users/${userId}/todos`)
         .expect(200);
       const body = response.body;
-      for (const element of body) {
-        expect(element).to.contain.keys("id", "userid", "title", "completed");
-      }
+      expect(body).to.contain.keys("id", "userid", "title", "completed");
+
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
