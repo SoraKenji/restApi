@@ -558,8 +558,10 @@ describe("API endpoint /users", () => {
   it("Should get addresses by id", async () => {
     try {
       const addresses = await repositorio.getAddressesById(addressId);
-      chai.assert.isObject(addresses);
-      helper.esAddressObject(addresses);
+      for (const element of addresses) {
+        chai.assert.isObject(element);
+        helper.esAddressObject(element);
+      }
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -569,8 +571,10 @@ describe("API endpoint /users", () => {
   it("Should get companies by id", async () => {
     try {
       const companies = await repositorio.getCompaniesById(companyId);
-      chai.assert.isObject(companies);
-      helper.esCompanyObject(companies);
+      for (const element of companies) {
+        chai.assert.isObject(element);
+        helper.esCompanyObject(element);
+      }
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);

@@ -191,11 +191,13 @@ router.get('/users/:userid/posts', async (req, res, next) => {
     try {
         const id = req.params.userid;
         const post = await contentRepo.getUserPost(id);
+
+        res.setHeader('Content-Type', 'application/json');
         if (!post) {
             res.status(404).send('not found')
             return
         }
-        res.status(200).send(JSON.stringify({ post }, null, 4));
+        res.status(200).send(JSON.stringify(post, null, 4));
     } catch (err) {
         res.status(500).send(err);
     }
@@ -210,7 +212,7 @@ router.get('/users/:userid/albums', async (req, res, next) => {
             res.status(404).send('not found')
             return
         }
-        res.status(200).send(JSON.stringify({ albums }));
+        res.status(200).send(JSON.stringify(albums));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -226,7 +228,7 @@ router.get('/users/:userid/todos', async (req, res, next) => {
             res.status(404).send('not found')
             return
         }
-        res.status(200).send(JSON.stringify({ todos }, null, 4));
+        res.status(200).send(JSON.stringify(todos, null, 4));
     } catch (err) {
         res.status(500).send(err);
     }
@@ -273,7 +275,6 @@ router.post('/users', async (req, res, next) => {
 router.get('/post', async (req, res, next) => {
     try {
         let posts = await contentRepo.getPosts();
-
         let queryfields = [];
         if (req.query.hasOwnProperty('fields')) {
             const re = /,/g;
@@ -301,7 +302,7 @@ router.get('/post', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ posts }, null, 4));
+        res.status(200).send(JSON.stringify(posts, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -357,7 +358,7 @@ router.get('/post/:postId', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ post }, null, 4));
+        res.status(200).send(JSON.stringify(post, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -411,7 +412,7 @@ router.get('/post/:postId/comments', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ comments: post }, null, 4));
+        res.status(200).send(JSON.stringify(post, null, 4));
     } catch (err) {
         res.status(500).send(err);
     }
@@ -449,7 +450,7 @@ router.get('/comments', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ comments }, null, 4));
+        res.status(200).send(JSON.stringify(comments, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -503,7 +504,7 @@ router.get('/comments/:commentId', async (req, res, next) => {
             res.status(400).send('');
             return;
         }
-        res.status(200).send(JSON.stringify({ comments }, null, 4));
+        res.status(200).send(JSON.stringify(comments, null, 4));
 
     } catch (err) {
         res.status(500).send(err);
@@ -578,7 +579,7 @@ router.get('/albums', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ albums }, null, 4));
+        res.status(200).send(JSON.stringify(albums, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -632,7 +633,7 @@ router.get('/albums/:albumId', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ album }, null, 4));
+        res.status(200).send(JSON.stringify(album, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -683,7 +684,7 @@ router.get('/albums/:albumId/photos', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ photosOfAlbums }, null, 4));
+        res.status(200).send(JSON.stringify(photosOfAlbums, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -722,7 +723,7 @@ router.get('/photos', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ photos }, null, 4));
+        res.status(200).send(JSON.stringify(photos, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -778,7 +779,7 @@ router.get('/photos/:photoId', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ photo }, null, 4));
+        res.status(200).send(JSON.stringify(photo, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -850,7 +851,7 @@ router.get('/todos', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ todos }, null, 4));
+        res.status(200).send(JSON.stringify(todos, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -866,9 +867,7 @@ router.post('/todos', async (req, res, next) => {
         if (req.body.completed == 'false') {
             req.body.completed = false;
         }
-        console.log(req.body);
         const respuesta = validator.esTODO(req.body);
-        console.log(respuesta);
         if (Object.keys(respuesta).length === 0 && respuesta.constructor === Object) {
             if (req.body.completed == 'true') {
                 req.body.completed = true;
@@ -915,7 +914,7 @@ router.get('/todos/:todoId', async (req, res, next) => {
             res.status(404).send('');
             return
         }
-        res.status(200).send(JSON.stringify({ todo }, null, 4));
+        res.status(200).send(JSON.stringify(todo, null, 4));
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);
@@ -935,9 +934,8 @@ router.put('/todos/:todoId', async (req, res, next) => {
             if (req.body.completed == 'false') {
                 req.body.completed = false;
             }
-            console.log(req.body);
             const resultado = await contentRepo.updateTODO(req.body);
-            console.log(resultado);
+
             if (!resultado) {
                 res.status(404);
                 return;
@@ -986,6 +984,36 @@ router.post('/address', async (req, res, next) => {
 router.post('/company', async (req, res, next) => {
     try {
         const resultado = await contentRepo.saveCompany(req.body);
+        res.setHeader('Content-Type', 'application/json');
+        if (!resultado) {
+            res.status(404);
+            return;
+        }
+        res.status(200).send(resultado);
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).send(err);
+    }
+});
+
+router.get('/company/:companyId', async (req, res, next) => {
+    try {
+        const resultado = await contentRepo.saveCompany(req.body);
+        res.setHeader('Content-Type', 'application/json');
+        if (!resultado) {
+            res.status(404);
+            return;
+        }
+        res.status(200).send(resultado);
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).send(err);
+    }
+});
+
+router.get('/address/:addressId', async (req, res, next) => {
+    try {
+        const resultado = await contentRepo.getCompaniesById(req.body);
         res.setHeader('Content-Type', 'application/json');
         if (!resultado) {
             res.status(404);
