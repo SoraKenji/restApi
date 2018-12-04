@@ -167,6 +167,60 @@ exports.esAlbum = (data) => {
     return validadorAlbum;
 }
 
+exports.esAddress = (data) => {
+    validatorAddress = {
+        street: ['Es un campo requerido'],
+        suite: ['Es un campo requerido'],
+        city: ['Es un campo requerido'],
+        zipcode: ['Es un campo requerido'],
+        lat: ['Es un campo requerido'],
+        lng: ['Es un campo requerido'],
+    };
+    if (data.hasOwnProperty('street')) {
+        if (data.street.length < 10 || data.street.length > 50) {
+            validatorAddress.street.push('El campo title debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorAddress.street;
+        }
+    }
+    if (data.hasOwnProperty('suite')) {
+        if (data.title.length < 10 || data.title.length > 50) {
+            validatorAddress.suite.push('El campo title debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorAddress.suite;
+        }
+    }
+    if (data.hasOwnProperty('city')) {
+        if (data.city.length < 10 || data.city.length > 50) {
+            validatorAddress.suite.push('El campo city debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorAddress.suite;
+        }
+    }
+    if (data.hasOwnProperty('zipcode')) {
+        if (data.zipcode.length < 10 || data.zipcode.length > 50) {
+            validatorAddress.zipcode.push('El campo zipcode debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorAddress.zipcode;
+        }
+    }
+    if (data.hasOwnProperty('lat')) {
+        if (data.lat.length < 10 || data.lat.length > 50) {
+            validatorAddress.lat.push('El campo lat debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorAddress.lat;
+        }
+    }
+    if (data.hasOwnProperty('lng')) {
+        if (data.lng.length < 10 || data.lng.length > 50) {
+            validatorAddress.lng.push('El campo lng debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorAddress.lng;
+        }
+    }
+    return validatorAddress;
+}
+
 exports.esPhoto = (data) => {
     validadorPhoto = {
         albumid: ['Es un campo requerido'],

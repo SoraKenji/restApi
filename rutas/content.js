@@ -996,9 +996,42 @@ router.post('/company', async (req, res, next) => {
     }
 });
 
+
+router.get('/company', async (req, res, next) => {
+    try {
+        const resultado = await contentRepo.getCompanies();
+        res.setHeader('Content-Type', 'application/json');
+        if (!resultado) {
+            res.status(404);
+            return;
+        }
+        res.status(200).send(resultado);
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).send(err);
+    }
+});
+
 router.get('/company/:companyId', async (req, res, next) => {
     try {
-        const resultado = await contentRepo.saveCompany(req.body);
+        const id = req.params.companyId;
+        const resultado = await contentRepo.getCompanyById(id);
+        res.setHeader('Content-Type', 'application/json');
+        if (!resultado) {
+            res.status(404);
+            return;
+        }
+        res.status(200).send(resultado);
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).send(err);
+    }
+});
+
+
+router.get('/address', async (req, res, next) => {
+    try {
+        const resultado = await contentRepo.getAddresses();
         res.setHeader('Content-Type', 'application/json');
         if (!resultado) {
             res.status(404);
@@ -1013,7 +1046,8 @@ router.get('/company/:companyId', async (req, res, next) => {
 
 router.get('/address/:addressId', async (req, res, next) => {
     try {
-        const resultado = await contentRepo.getCompaniesById(req.body);
+        const id = req.params.addressId;
+        const resultado = await contentRepo.getAddressById(id);
         res.setHeader('Content-Type', 'application/json');
         if (!resultado) {
             res.status(404);
@@ -1025,5 +1059,23 @@ router.get('/address/:addressId', async (req, res, next) => {
         res.status(500).send(err);
     }
 });
+
+router.put('/address/:addressId', async (req, res, next) => {
+    try {
+        const id = req.params.addressId;
+        const respuesta = validator.esAddress(req.body);
+        const resultado = await contentRepo.getAddressById(id);
+        res.setHeader('Content-Type', 'application/json');
+        if (!resultado) {
+            res.status(404);
+            return;
+        }
+        res.status(200).send(resultado);
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).send(err);
+    }
+});
+
 //// END TODO
 module.exports = router;

@@ -631,6 +631,60 @@ describe("Pacientes API", () => {
     }
   });
 
+  it("Conseguir todas las addresses", async () => {
+    try {
+      const response = await apiClient
+        .get(`${apiClientBaseUri}/address`)
+        .expect(200);
+      const body = response.body;
+      for (const element of body) {
+        assert.isObject(element);
+        helper.esAddressObject(element);
+      }
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+
+  it("Conseguir address", async () => {
+    try {
+      const response = await apiClient
+        .get(`${apiClientBaseUri}/address/${addressId}`)
+        .expect(200);
+      const body = response.body;
+      assert.isObject(body);
+      helper.esAddressObject(body);
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+
+  it("Actualizar address", async () => {
+    try {
+      const data = {
+        userid: userId,
+        street: "calle ejemplo 0123",
+        suite: "suite ejemplo 0123",
+        city: "concepcionbuena ondawaztho",
+        zipcode: "4030000",
+        lat: 12,
+        lng: 13
+      };
+      const response = await apiClient
+        .put(`${apiClientBaseUri}/address/${addressId}`)
+        .send(data)
+        .expect(200);
+      const body = response.body;
+      assert.isObject(body);
+      helper.esAddressObject(body);
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+
   it("Guardar company", async () => {
     try {
       const data = {
@@ -653,32 +707,30 @@ describe("Pacientes API", () => {
     }
   });
 
-  it("Conseguir company", async () => {
+  it("Conseguir todas las compañias", async () => {
     try {
       const response = await apiClient
-        .post(`${apiClientBaseUri}/company`)
-        .send(data)
+        .get(`${apiClientBaseUri}/company`)
         .expect(200);
       const body = response.body;
-      assert.isObject(body);
-      helper.esCompanyObject(body);
-      companyId = body.id;
+      for (const element of body) {
+        assert.isObject(element);
+        helper.esCompanyObject(element);
+      }
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
     }
   });
 
-  it("Conseguir Address", async () => {
+  it("Conseguir company", async () => {
     try {
       const response = await apiClient
-        .post(`${apiClientBaseUri}/company`)
-        .send(data)
+        .get(`${apiClientBaseUri}/company/${companyId}`)
         .expect(200);
       const body = response.body;
       assert.isObject(body);
       helper.esCompanyObject(body);
-      companyId = body.id;
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -944,15 +996,6 @@ describe("Pacientes API", () => {
           "body"
         );
       }
-      /*for (const element of body) {
-        expect(element).to.contain.keys(
-          "id",
-          "postid",
-          "name",
-          "email",
-          "body"
-        );
-      }*/
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);

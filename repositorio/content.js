@@ -424,6 +424,13 @@ const getAddressesById = async (userId) => {
     conexion.release();
     return result.rows;
 }
+const getAddressById = async (addressId) => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM addresses WHERE id = $1", [addressId]);
+    conexion.release();
+    return result.rows[0];
+}
+
 const saveAddress = async (address) => {
     try {
         const conexion = await conectar();
@@ -454,6 +461,12 @@ const getCompaniesById = async (userId) => {
     const result = await conexion.query("SELECT * FROM companies WHERE userid = $1", [userId]);
     conexion.release();
     return result.rows;
+}
+const getCompanyById = async (companyId) => {
+    const conexion = await conectar();
+    const result = await conexion.query("SELECT * FROM companies WHERE id = $1", [companyId]);
+    conexion.release();
+    return result.rows[0];
 }
 
 const saveCompany = async (company) => {
@@ -519,3 +532,5 @@ exports.getUserPost = getUserPost;
 exports.saveUser = saveUser;
 exports.saveAddress = saveAddress;
 exports.saveCompany = saveCompany;
+exports.getCompanyById = getCompanyById;
+exports.getAddressById = getAddressById;
