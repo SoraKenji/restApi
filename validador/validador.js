@@ -173,8 +173,6 @@ exports.esAddress = (data) => {
         suite: ['Es un campo requerido'],
         city: ['Es un campo requerido'],
         zipcode: ['Es un campo requerido'],
-        lat: ['Es un campo requerido'],
-        lng: ['Es un campo requerido'],
     };
     if (data.hasOwnProperty('street')) {
         if (data.street.length < 10 || data.street.length > 50) {
@@ -184,41 +182,61 @@ exports.esAddress = (data) => {
         }
     }
     if (data.hasOwnProperty('suite')) {
-        if (data.title.length < 10 || data.title.length > 50) {
+        if (data.suite.length < 5 || data.suite.length > 40) {
             validatorAddress.suite.push('El campo title debe tener entre 10 y 50 caracteres');
         } else {
             delete validatorAddress.suite;
         }
     }
     if (data.hasOwnProperty('city')) {
-        if (data.city.length < 10 || data.city.length > 50) {
-            validatorAddress.suite.push('El campo city debe tener entre 10 y 50 caracteres');
+        if (data.city.length < 5 || data.city.length > 40) {
+            validatorAddress.city.push('El campo city debe tener entre 10 y 50 caracteres');
         } else {
-            delete validatorAddress.suite;
+            delete validatorAddress.city;
         }
     }
     if (data.hasOwnProperty('zipcode')) {
-        if (data.zipcode.length < 10 || data.zipcode.length > 50) {
+        if (data.zipcode.length < 1 || data.zipcode.length > 20) {
             validatorAddress.zipcode.push('El campo zipcode debe tener entre 10 y 50 caracteres');
         } else {
             delete validatorAddress.zipcode;
         }
     }
-    if (data.hasOwnProperty('lat')) {
-        if (data.lat.length < 10 || data.lat.length > 50) {
-            validatorAddress.lat.push('El campo lat debe tener entre 10 y 50 caracteres');
-        } else {
-            delete validatorAddress.lat;
-        }
-    }
-    if (data.hasOwnProperty('lng')) {
-        if (data.lng.length < 10 || data.lng.length > 50) {
-            validatorAddress.lng.push('El campo lng debe tener entre 10 y 50 caracteres');
-        } else {
-            delete validatorAddress.lng;
-        }
-    }
     return validatorAddress;
+}
+
+exports.esCompany = (data) => {
+    validatorCompany = {
+        userid: ['Es un campo requerido'],
+        name: ['Es un campo requerido'],
+        catchphrase: ['Es un campo requerido'],
+        bs: ['Es un campo requerido'],
+    };
+    if (data.hasOwnProperty('userid')) {
+        delete validatorCompany.userid;
+    }
+    if (data.hasOwnProperty('name')) {
+        if (data.name.length < 5 || data.name.length > 40) {
+            validatorCompany.name.push('El campo title debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorCompany.name;
+        }
+    }
+    if (data.hasOwnProperty('catchphrase')) {
+        if (data.catchphrase.length < 5 || data.catchphrase.length > 40) {
+            validatorCompany.catchphrase.push('El campo catchphrase debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorCompany.catchphrase;
+        }
+    }
+    if (data.hasOwnProperty('bs')) {
+        if (data.bs.length < 1 || data.bs.length > 20) {
+            validatorCompany.bs.push('El campo bs debe tener entre 10 y 50 caracteres');
+        } else {
+            delete validatorCompany.bs;
+        }
+    }
+    return validatorCompany;
 }
 
 exports.esPhoto = (data) => {

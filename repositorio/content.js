@@ -75,6 +75,7 @@ const updateUser = async (user) => {
                         RETURNING *`;
         const values = [user.id, user.name, user.username, user.email, user.phone, user.website];
         const res = await conexion.query(text, values);
+        conexion.release();
         return res.rows[0];
     } catch (err) {
         throw err;
@@ -439,7 +440,22 @@ const saveAddress = async (address) => {
                     VALUES($1, $2, $3, $4, $5, $6, $7) 
                     RETURNING *`;
         const values = [address.userid, address.street, address.suite, address.city, address.zipcode, address.lat, address.lng];
+        const res = await conexion.query(text, values);
+        conexion.release();
+        return res.rows[0];
+    } catch (err) {
+        throw err;
+    }
+}
 
+const updateAddress = async (address) => {
+    try {
+        const conexion = await conectar();
+        const text = `UPDATE addresses
+                        SET userid = $2, street = $3, suite = $4, city = $5, zipcode = $6, lat = $7, lng = $8
+                        WHERE id = $1
+                        RETURNING *`;
+        const values = [address.id, address.userid, address.street, address.suite, address.city, address.zipcode, address.lat, address.lng];
         const res = await conexion.query(text, values);
         conexion.release();
         return res.rows[0];
@@ -478,6 +494,23 @@ const saveCompany = async (company) => {
                     RETURNING *`;
         const values = [company.userid, company.name,
         company.catchphrase, company.bs];
+        const res = await conexion.query(text, values);
+        conexion.release();
+        return res.rows[0];
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+const updateCompany = async (company) => {
+    try {
+        const conexion = await conectar();
+        const text = `UPDATE companies
+                        SET userid = $2, name = $3, catchphrase = $4, bs = $5
+                        WHERE id = $1
+                        RETURNING *`;
+        const values = [company.id, company.name, company.catchphrase, company.bs];
         const res = await conexion.query(text, values);
         conexion.release();
         return res.rows[0];
@@ -534,3 +567,6 @@ exports.saveAddress = saveAddress;
 exports.saveCompany = saveCompany;
 exports.getCompanyById = getCompanyById;
 exports.getAddressById = getAddressById;
+exports.updateAddress = updateAddress;
+
+exports.updateCompany = updateCompany;

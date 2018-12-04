@@ -1028,6 +1028,31 @@ router.get('/company/:companyId', async (req, res, next) => {
     }
 });
 
+router.put('/company/:companyId', async (req, res, next) => {
+    try {
+        const id = req.params.companyId;
+        const respuesta = validator.esCompany(req.body);
+        console.log('sddsd');
+        if (Object.keys(respuesta).length === 0 && respuesta.constructor === Object) {
+            req.body.id = id;
+            console.log('22');
+            const resultado = await contentRepo.updateCompany(req.body);
+            console.log(resultado);
+            res.setHeader('Content-Type', 'application/json');
+            if (!resultado) {
+                res.status(404);
+                return;
+            }
+            res.status(200).send(resultado);
+        } else {
+            res.status(400).send(respuesta);
+        }
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).send(err);
+    }
+});
+
 
 router.get('/address', async (req, res, next) => {
     try {
@@ -1064,13 +1089,18 @@ router.put('/address/:addressId', async (req, res, next) => {
     try {
         const id = req.params.addressId;
         const respuesta = validator.esAddress(req.body);
-        const resultado = await contentRepo.getAddressById(id);
-        res.setHeader('Content-Type', 'application/json');
-        if (!resultado) {
-            res.status(404);
-            return;
+        if (Object.keys(respuesta).length === 0 && respuesta.constructor === Object) {
+            req.body.id = id;
+            const resultado = await contentRepo.updateAddress(req.body);
+            res.setHeader('Content-Type', 'application/json');
+            if (!resultado) {
+                res.status(404);
+                return;
+            }
+            res.status(200).send(resultado);
+        } else {
+            res.status(400).send(respuesta);
         }
-        res.status(200).send(resultado);
     } catch (err) {
         res.setHeader('Content-Type', 'application/json');
         res.status(500).send(err);

@@ -664,6 +664,7 @@ describe("Pacientes API", () => {
   it("Actualizar address", async () => {
     try {
       const data = {
+        id: addressId,
         userid: userId,
         street: "calle ejemplo 0123",
         suite: "suite ejemplo 0123",
@@ -679,6 +680,27 @@ describe("Pacientes API", () => {
       const body = response.body;
       assert.isObject(body);
       helper.esAddressObject(body);
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+
+  it("Actualizar address falla 400", async () => {
+    try {
+      const data = {
+        id: addressId,
+        userid: userId,
+        street: "calle ejemplo 0123",
+        city: "concepcionbuena ondawaztho",
+        zipcode: "4030000",
+        lat: 12,
+        lng: 13
+      };
+      const response = await apiClient
+        .put(`${apiClientBaseUri}/address/${addressId}`)
+        .send(data)
+        .expect(400);
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -736,6 +758,47 @@ describe("Pacientes API", () => {
       return Promise.reject(err);
     }
   });
+
+  it("Actualizar company", async () => {
+    try {
+      const data = {
+        id: companyId,
+        userid: userId,
+        name: "calle ejemplo 0123",
+        catchphrase: "suite ejemplo 0123ddd",
+        bs: "concepcionbuena onda",
+      };
+      const response = await apiClient
+        .put(`${apiClientBaseUri}/company/${companyId}`)
+        .send(data)
+        .expect(200);
+      const body = response.body;
+      assert.isObject(body);
+      helper.esAddressObject(body);
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+
+  it("Actualizar company falla 400", async () => {
+    try {
+      const data = {
+        userid: userId,
+        name: "calle ejemplo 0123",
+        catchphrase: "suite ejemplo 0123",
+        bs: "concepcionbuena onda",
+      };
+      const response = await apiClient
+        .put(`${apiClientBaseUri}/company/${companyId}`)
+        .send(data)
+        .expect(400);
+      return Promise.resolve();
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+
 
   it("Conseguir user by Id", async () => {
     try {
