@@ -507,10 +507,11 @@ const updateCompany = async (company) => {
     try {
         const conexion = await conectar();
         const text = `UPDATE companies
-                        SET userid = $2, name = $3, catchphrase = $4, bs = $5
-                        WHERE id = $1
-                        RETURNING *`;
-        const values = [company.id, company.name, company.catchphrase, company.bs];
+            SET userid = $2, name = $3, catchphrase = $4, bs = $5
+            WHERE id = $1
+            RETURNING *`;
+        const values = [company.id, company.userid, company.name,
+        company.catchphrase, company.bs];
         const res = await conexion.query(text, values);
         conexion.release();
         return res.rows[0];
@@ -568,5 +569,4 @@ exports.saveCompany = saveCompany;
 exports.getCompanyById = getCompanyById;
 exports.getAddressById = getAddressById;
 exports.updateAddress = updateAddress;
-
 exports.updateCompany = updateCompany;

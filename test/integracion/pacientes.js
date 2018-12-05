@@ -774,7 +774,7 @@ describe("Pacientes API", () => {
         .expect(200);
       const body = response.body;
       assert.isObject(body);
-      helper.esAddressObject(body);
+      helper.esCompanyObject(body);
       return Promise.resolve();
     } catch (err) {
       return Promise.reject(err);
@@ -786,7 +786,6 @@ describe("Pacientes API", () => {
       const data = {
         userid: userId,
         name: "calle ejemplo 0123",
-        catchphrase: "suite ejemplo 0123",
         bs: "concepcionbuena onda",
       };
       const response = await apiClient

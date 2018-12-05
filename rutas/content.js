@@ -1032,12 +1032,9 @@ router.put('/company/:companyId', async (req, res, next) => {
     try {
         const id = req.params.companyId;
         const respuesta = validator.esCompany(req.body);
-        console.log('sddsd');
         if (Object.keys(respuesta).length === 0 && respuesta.constructor === Object) {
             req.body.id = id;
-            console.log('22');
             const resultado = await contentRepo.updateCompany(req.body);
-            console.log(resultado);
             res.setHeader('Content-Type', 'application/json');
             if (!resultado) {
                 res.status(404);
